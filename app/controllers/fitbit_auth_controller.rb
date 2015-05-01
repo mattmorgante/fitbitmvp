@@ -6,6 +6,7 @@ class FitbitAuthController < ApplicationController
     # The request is made to Fitbit
 
   end
+  
   def get_response
     # Callback from Fitbit Oauth
 
