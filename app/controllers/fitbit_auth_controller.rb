@@ -1,16 +1,17 @@
 class FitbitAuthController < ApplicationController
   def index
+    # this is the home page of the application
+    # We've got a method but no controller actions 
   end
   
   def make_request
-    # The request is made to Fitbit
-
+    # The request is made to Fitbit via Oauth
   end
   
   def get_response
     # Callback from Fitbit Oauth
 
-    # Oauth Access Credentials
+    # Access Credentials
     oauth_token = params[:oauth_token]
     oauth_verifier = params[:oauth_verifier]
 
@@ -29,8 +30,7 @@ private
     user_secret = fitbit_data["credentials"]["secret"]
     user_token = fitbit_data["credentials"]["token"]
 
-    # Store this information in you user model for
-    # logins in the future.
+    # creates a new instance of the Fitgem object using the Gem 
     client = Fitgem::Client.new({
       consumer_key: '978d0a72a55a709a67e26868770d6131',
       consumer_secret: '0537b84f3605af1716d4790bcf6d0bc7',
