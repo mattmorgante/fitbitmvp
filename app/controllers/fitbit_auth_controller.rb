@@ -1,48 +1,39 @@
 class FitbitAuthController < ApplicationController
-  def index
-    # this is the home page of the application
-    # We've got a method but no controller actions 
-  end
   
-  def make_request
-    # The request is made to Fitbit via Oauth
-  end
-  
+  # this is the callback information from fitbit
   def get_response
-    # Callback from Fitbit Oauth
-
     # Access Credentials
     oauth_token = params[:oauth_token]
     oauth_verifier = params[:oauth_verifier]
 
-    # User Information and User Access Credentials
-    fitbit_data  = request.env['omniauth.auth']
+    # creates a variable we can pass as an argument below
+    data  = request.env['omniauth.auth']
 
-    # Get User Activity Information
-    activities = get_user_activities(fitbit_data)
-
+    # the data we'll be receiving, activity data
+    activities = get_user_activities(data)
+    # our view will render a basic json object  
     render json:activities
   end
 
 private
-  def get_user_activities(fitbit_data)
-    fitbit_user_id = fitbit_data["uid"]
-    user_secret = fitbit_data["credentials"]["secret"]
-    user_token = fitbit_data["credentials"]["token"]
+  # this is the information we're sending to fitbit
+  def get_user_activities(data)
+    fitbit_user_id = data["uid"]
+    user_secret = data["credentials"]["secret"]
+    user_token = data["credentials"]["token"]
 
-    # creates a new instance of the Fitgem object using the Gem 
+    # creates a new instance of Fitgem
     client = Fitgem::Client.new({
-      consumer_key: '978d0a72a55a709a67e26868770d6131',
-      consumer_secret: '0537b84f3605af1716d4790bcf6d0bc7',
+      consumer_key: 'YOUR_CONSUMER_KEY',
+      consumer_secret: 'YOUR_CONSUMER_SECRET',
       token: user_token,
       secret: user_secret,
       user_id: fitbit_user_id,
     })
-
-    # Reconnects existing user using the information above
+    # Reconnects existing user using their credentials
     access_token = client.reconnect(user_token, user_secret)
 
-    # client.activities_on_date('2015-03-25') <- Specific Date
+    # specifies date range to request data from
     client.activities_on_date('today')
   end
 end
