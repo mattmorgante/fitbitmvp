@@ -7,12 +7,13 @@ class FitbitAuthController < ApplicationController
     oauth_verifier = params[:oauth_verifier]
 
     # creates a variable we can pass as an argument below
-    data  = request.env['omniauth.auth']
+    data = request.env['omniauth.auth']
 
     # the data we'll be receiving, activity data
     activities = get_user_activities(data)
     # our view will render a basic json object  
     render json:activities
+    #activities is an object
   end
 
 private
